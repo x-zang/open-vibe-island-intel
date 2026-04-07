@@ -81,7 +81,7 @@
 
 | 功能 | 状态 | 说明 |
 |---|---|---|
-| 刘海 / 顶部栏覆盖层 | 已支持 | 刘海 Mac 在刘海区域，其他 Mac 顶部居中栏 |
+| 刘海 / 顶部栏覆盖层 | 已支持 | 刘海 Mac 在刘海区域，Intel Mac 及外接显示器降级为顶部居中栏 |
 | 控制中心 | 已支持 | Hook 状态、用量仪表盘 |
 | 设置 | 已支持 | 通用、显示、声音、快捷键、实验室、关于 |
 | 完成通知 | 已支持 | 已支持claude code, codex |
@@ -257,7 +257,7 @@ Claude usage 设置可在 app 控制中心启用，保持 opt-in。bridge 会把
 
 ## 系统要求
 
-- macOS 14+
+- macOS 14+（Apple Silicon 和 Intel 均支持）
 - Swift 6.2
 - Xcode（用于 app target）
 

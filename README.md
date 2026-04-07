@@ -81,7 +81,7 @@ This app may install hooks for Claude Code or Codex, so you may see hook-related
 
 | Feature | Status | Description |
 |---|---|---|
-| Notch / Top-bar overlay | Supported | Notch area on notch Macs, top-center bar on others |
+| Notch / Top-bar overlay | Supported | Notch area on notch Macs, top-center bar on Intel and external displays |
 | Control center | Supported | Hook status, usage dashboard |
 | Settings | Supported | General, Display, Sound, Shortcuts, Lab, About |
 | Notification mode | Supported | Auto-height panel for permission requests and session events |
@@ -256,7 +256,7 @@ Claude usage setup is available from the app's control center and remains opt-in
 
 ## Requirements
 
-- macOS 14+
+- macOS 14+ (Apple Silicon and Intel)
 - Swift 6.2
 - Xcode (for the app target)
 
