@@ -108,12 +108,16 @@ public enum HooksBinaryLocator {
             executableDirectory?.deletingLastPathComponent().appendingPathComponent("Helpers/VibeIslandHooks"),
         ].compactMap { $0 } + ManagedHooksBinary.candidateURLs(fileManager: fileManager) + [
             currentDirectory.appendingPathComponent(".build/arm64-apple-macosx/release/OpenIslandHooks"),
+            currentDirectory.appendingPathComponent(".build/x86_64-apple-macosx/release/OpenIslandHooks"),
             currentDirectory.appendingPathComponent(".build/release/OpenIslandHooks"),
             currentDirectory.appendingPathComponent(".build/arm64-apple-macosx/release/VibeIslandHooks"),
+            currentDirectory.appendingPathComponent(".build/x86_64-apple-macosx/release/VibeIslandHooks"),
             currentDirectory.appendingPathComponent(".build/release/VibeIslandHooks"),
             currentDirectory.appendingPathComponent(".build/arm64-apple-macosx/debug/OpenIslandHooks"),
+            currentDirectory.appendingPathComponent(".build/x86_64-apple-macosx/debug/OpenIslandHooks"),
             currentDirectory.appendingPathComponent(".build/debug/OpenIslandHooks"),
             currentDirectory.appendingPathComponent(".build/arm64-apple-macosx/debug/VibeIslandHooks"),
+            currentDirectory.appendingPathComponent(".build/x86_64-apple-macosx/debug/VibeIslandHooks"),
             currentDirectory.appendingPathComponent(".build/debug/VibeIslandHooks"),
         ]
 
