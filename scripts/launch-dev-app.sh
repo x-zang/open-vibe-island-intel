@@ -10,7 +10,8 @@ for arg in "$@"; do
 done
 
 repo_root="$(cd "$(dirname "$0")/.." && pwd)"
-build_root="$repo_root/.build/arm64-apple-macosx/debug"
+host_arch="$(uname -m)"
+build_root="$repo_root/.build/${host_arch}-apple-macosx/debug"
 app_binary="$build_root/OpenIslandApp"
 hooks_binary="$build_root/OpenIslandHooks"
 setup_binary="$build_root/OpenIslandSetup"

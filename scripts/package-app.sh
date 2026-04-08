@@ -25,14 +25,27 @@ entitlements_path="$repo_root/config/packaging/OpenIslandApp.entitlements"
 
 cd "$repo_root"
 
-swift build -c release --product OpenIslandApp
-swift build -c release --product OpenIslandHooks
-swift build -c release --product OpenIslandSetup
+# Build for both architectures to produce a universal binary.
+swift build -c release --arch arm64  --product OpenIslandApp
+swift build -c release --arch arm64  --product OpenIslandHooks
+swift build -c release --arch arm64  --product OpenIslandSetup
+swift build -c release --arch x86_64 --product OpenIslandApp
+swift build -c release --arch x86_64 --product OpenIslandHooks
+swift build -c release --arch x86_64 --product OpenIslandSetup
 
-build_bin_dir="$(swift build -c release --show-bin-path)"
-app_binary="$build_bin_dir/OpenIslandApp"
-hooks_binary="$build_bin_dir/OpenIslandHooks"
-setup_binary="$build_bin_dir/OpenIslandSetup"
+arm64_bin_dir="$repo_root/.build/arm64-apple-macosx/release"
+x86_bin_dir="$repo_root/.build/x86_64-apple-macosx/release"
+universal_bin_dir="$repo_root/.build/universal/release"
+mkdir -p "$universal_bin_dir"
+lipo -create "$arm64_bin_dir/OpenIslandApp"   "$x86_bin_dir/OpenIslandApp"   -output "$universal_bin_dir/OpenIslandApp"
+lipo -create "$arm64_bin_dir/OpenIslandHooks" "$x86_bin_dir/OpenIslandHooks" -output "$universal_bin_dir/OpenIslandHooks"
+lipo -create "$arm64_bin_dir/OpenIslandSetup" "$x86_bin_dir/OpenIslandSetup" -output "$universal_bin_dir/OpenIslandSetup"
+
+# Use arm64 build dir for architecture-neutral artifacts (resource bundle).
+build_bin_dir="$arm64_bin_dir"
+app_binary="$universal_bin_dir/OpenIslandApp"
+hooks_binary="$universal_bin_dir/OpenIslandHooks"
+setup_binary="$universal_bin_dir/OpenIslandSetup"
 brand_icon="$repo_root/Assets/Brand/OpenIsland.icns"
 
 python3 "$brand_script"
