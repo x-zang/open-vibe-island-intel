@@ -34,6 +34,12 @@ final class UpdateChecker: NSObject {
     /// Start Sparkle's automatic update checking schedule.
     /// Call once after app launch.
     func startIfNeeded() {
+        // Sparkle requires a valid bundle identifier. Running the raw debug
+        // binary outside an .app bundle has none, so skip silently.
+        guard Bundle.main.bundleIdentifier != nil else {
+            return
+        }
+
         let updater = updaterController.updater
         updater.automaticallyChecksForUpdates = true
         updater.updateCheckInterval = 60 * 60 // 1 hour
