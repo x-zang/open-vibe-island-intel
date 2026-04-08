@@ -39,7 +39,11 @@ struct HooksBinaryLocatorTests {
         defer { try? FileManager.default.removeItem(at: rootURL) }
         let binary = rootURL.appendingPathComponent(".build/arm64-apple-macosx/release/OpenIslandHooks")
         try makeExecutable(at: binary, contents: "arm64-release")
-        let result = HooksBinaryLocator.locate(currentDirectory: rootURL, environment: [:])
+        let result = HooksBinaryLocator.locate(
+            currentDirectory: rootURL,
+            managedHooksHomeDirectory: rootURL,
+            environment: [:]
+        )
         #expect(result?.standardizedFileURL == binary.standardizedFileURL)
     }
 
@@ -49,7 +53,11 @@ struct HooksBinaryLocatorTests {
         defer { try? FileManager.default.removeItem(at: rootURL) }
         let binary = rootURL.appendingPathComponent(".build/x86_64-apple-macosx/release/OpenIslandHooks")
         try makeExecutable(at: binary, contents: "x86-release")
-        let result = HooksBinaryLocator.locate(currentDirectory: rootURL, environment: [:])
+        let result = HooksBinaryLocator.locate(
+            currentDirectory: rootURL,
+            managedHooksHomeDirectory: rootURL,
+            environment: [:]
+        )
         #expect(result?.standardizedFileURL == binary.standardizedFileURL)
     }
 
@@ -59,7 +67,11 @@ struct HooksBinaryLocatorTests {
         defer { try? FileManager.default.removeItem(at: rootURL) }
         let binary = rootURL.appendingPathComponent(".build/x86_64-apple-macosx/debug/OpenIslandHooks")
         try makeExecutable(at: binary, contents: "x86-debug")
-        let result = HooksBinaryLocator.locate(currentDirectory: rootURL, environment: [:])
+        let result = HooksBinaryLocator.locate(
+            currentDirectory: rootURL,
+            managedHooksHomeDirectory: rootURL,
+            environment: [:]
+        )
         #expect(result?.standardizedFileURL == binary.standardizedFileURL)
     }
 
@@ -69,7 +81,11 @@ struct HooksBinaryLocatorTests {
         defer { try? FileManager.default.removeItem(at: rootURL) }
         let binary = rootURL.appendingPathComponent(".build/release/OpenIslandHooks")
         try makeExecutable(at: binary, contents: "generic-release")
-        let result = HooksBinaryLocator.locate(currentDirectory: rootURL, environment: [:])
+        let result = HooksBinaryLocator.locate(
+            currentDirectory: rootURL,
+            managedHooksHomeDirectory: rootURL,
+            environment: [:]
+        )
         #expect(result?.standardizedFileURL == binary.standardizedFileURL)
     }
 

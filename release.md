@@ -1,32 +1,30 @@
 # Release Notes
 
-## Building for Distribution
+Use [`docs/releasing.md`](./docs/releasing.md) as the source-of-truth release process.
 
-### Universal Binary (Fat Binary)
+## Packaging
 
-Build a universal binary that runs natively on both Apple Silicon (arm64) and Intel (x86_64) Macs:
-
-```bash
-swift build -c release --arch arm64 --arch x86_64
-```
-
-Output is at `.build/apple/Products/Release/`.
-
-All three executables must be built as universal:
-- `OpenIslandApp` — main app
-- `OpenIslandHooks` — hook CLI invoked by agents (critical)
-- `OpenIslandSetup` — installer CLI
-
-Verify after building:
+Build distribution artifacts through the repo packaging script:
 
 ```bash
-lipo -info .build/apple/Products/Release/OpenIslandHooks
-# Expected: Architectures in the fat file: arm64 x86_64
+OPEN_ISLAND_VERSION=<version> \
+OPEN_ISLAND_EDDSA_PUBLIC_KEY="<your-public-key>" \
+zsh scripts/package-app.sh
 ```
 
-### Code Signing and Notarization
+This produces the packaged app artifacts under `output/package/` and keeps the release flow aligned with:
 
-macOS Gatekeeper will block unsigned binaries on user machines. Before distributing:
+- Sparkle framework embedding
+- app bundle assembly
+- signing and notarization steps
+- appcast updates
+- bilingual release notes requirements
 
-1. Sign with a Developer ID certificate
-2. Notarize with Apple
+## Architecture Support
+
+The package supports both Apple Silicon and Intel Macs on macOS 14+.
+Verify the packaged binaries match the expected architectures before release:
+
+```bash
+lipo -info "output/package/Open Island.app/Contents/Helpers/OpenIslandHooks"
+```

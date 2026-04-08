@@ -4,16 +4,22 @@ public enum ManagedHooksBinary {
     public static let binaryName = "OpenIslandHooks"
     public static let legacyBinaryName = "VibeIslandHooks"
 
-    public static func defaultURL(fileManager: FileManager = .default) -> URL {
-        installDirectory(fileManager: fileManager)
+    public static func defaultURL(
+        fileManager: FileManager = .default,
+        homeDirectory: URL? = nil
+    ) -> URL {
+        installDirectory(fileManager: fileManager, homeDirectory: homeDirectory)
             .appendingPathComponent(binaryName)
             .standardizedFileURL
     }
 
-    public static func candidateURLs(fileManager: FileManager = .default) -> [URL] {
+    public static func candidateURLs(
+        fileManager: FileManager = .default,
+        homeDirectory: URL? = nil
+    ) -> [URL] {
         [
-            defaultURL(fileManager: fileManager),
-            legacyInstallDirectory(fileManager: fileManager)
+            defaultURL(fileManager: fileManager, homeDirectory: homeDirectory),
+            legacyInstallDirectory(fileManager: fileManager, homeDirectory: homeDirectory)
                 .appendingPathComponent(legacyBinaryName)
                 .standardizedFileURL,
         ]
@@ -68,16 +74,16 @@ public enum ManagedHooksBinary {
         return true
     }
 
-    private static func installDirectory(fileManager: FileManager) -> URL {
-        fileManager.homeDirectoryForCurrentUser
+    private static func installDirectory(fileManager: FileManager, homeDirectory: URL?) -> URL {
+        (homeDirectory ?? fileManager.homeDirectoryForCurrentUser)
             .appendingPathComponent("Library", isDirectory: true)
             .appendingPathComponent("Application Support", isDirectory: true)
             .appendingPathComponent("OpenIsland", isDirectory: true)
             .appendingPathComponent("bin", isDirectory: true)
     }
 
-    private static func legacyInstallDirectory(fileManager: FileManager) -> URL {
-        fileManager.homeDirectoryForCurrentUser
+    private static func legacyInstallDirectory(fileManager: FileManager, homeDirectory: URL?) -> URL {
+        (homeDirectory ?? fileManager.homeDirectoryForCurrentUser)
             .appendingPathComponent("Library", isDirectory: true)
             .appendingPathComponent("Application Support", isDirectory: true)
             .appendingPathComponent("VibeIsland", isDirectory: true)
@@ -90,6 +96,7 @@ public enum HooksBinaryLocator {
         fileManager: FileManager = .default,
         currentDirectory: URL? = nil,
         executableDirectory: URL? = nil,
+        managedHooksHomeDirectory: URL? = nil,
         environment: [String: String] = ProcessInfo.processInfo.environment
     ) -> URL? {
         if let explicitPath = environment["OPEN_ISLAND_HOOKS_BINARY"] ?? environment["VIBE_ISLAND_HOOKS_BINARY"],
@@ -106,7 +113,10 @@ public enum HooksBinaryLocator {
             executableDirectory?.appendingPathComponent("VibeIslandHooks"),
             executableDirectory?.deletingLastPathComponent().appendingPathComponent("VibeIslandHooks"),
             executableDirectory?.deletingLastPathComponent().appendingPathComponent("Helpers/VibeIslandHooks"),
-        ].compactMap { $0 } + ManagedHooksBinary.candidateURLs(fileManager: fileManager) + [
+        ].compactMap { $0 } + ManagedHooksBinary.candidateURLs(
+            fileManager: fileManager,
+            homeDirectory: managedHooksHomeDirectory
+        ) + [
             currentDirectory.appendingPathComponent(".build/arm64-apple-macosx/release/OpenIslandHooks"),
             currentDirectory.appendingPathComponent(".build/x86_64-apple-macosx/release/OpenIslandHooks"),
             currentDirectory.appendingPathComponent(".build/release/OpenIslandHooks"),
